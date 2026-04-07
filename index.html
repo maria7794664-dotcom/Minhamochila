@@ -1,34 +1,263 @@
-<div style="text-align: center;">
-  <a href="resumoSO.html">
-    <button class="meu-botao">Sistemas Operacionais</button>
-  </a>
-</div>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mochila Escolar Pro</title>
 
 <style>
-.meu-botao {
-  padding: 12px 20px;
-  font-size: 16px;
+body {
+  margin: 0;
+  font-family: Segoe UI, Arial;
+  background: #e6f4ea;
+  color: #2a3a2b;
+}
+
+header {
+  background: #b7e4c7;
+  padding: 15px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+nav {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  background: #d8f3dc;
+  padding: 10px;
+}
+
+nav button {
+  padding: 10px 15px;
   border: none;
   border-radius: 8px;
-  background-color: #4CAF50;
-  color: white;
   cursor: pointer;
+  background: #95d5b2;
   transition: 0.3s;
 }
 
-/* Hover (quando passa o mouse) */
-.meu-botao:hover {
-  background-color: #45a049;
-  transform: scale(1.05);
+nav button.ativo {
+  background: #40916c;
+  color: white;
 }
 
-/* Clique */
-.meu-botao:active {
-  transform: scale(0.97);
+.container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: auto;
 }
 
-/* Melhor pra mobile */
-.meu-botao:focus {
-  outline: none;
+.card {
+  background: white;
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.categoria {
+  background: #95d5b2;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.categoria-conteudo {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 10px;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: 0.4s;
+}
+
+.categoria-conteudo.ativo {
+  max-height: 2000px;
+  opacity: 1;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+button {
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.lista-item {
+  display: flex;
+  justify-content: space-between;
+  background: #e6f4ea;
+  padding: 5px 10px;
+  margin-bottom: 5px;
+  border-radius: 6px;
+}
+
+.concluida {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+.hidden { display: none; }
+
+.toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #2a3a2b;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
 }
 </style>
+</head>
+
+<body>
+
+<header>🎒 Mochila Escolar Pro</header>
+
+<nav>
+  <button onclick="abrir('materias', this)">Matérias</button>
+  <button onclick="abrir('provas', this)">Provas</button>
+  <button onclick="window.location.href='resumoSO.html'">Sistemas Operacionais</button>
+</nav>
+
+<div class="container">
+
+<div id="materias">
+  <div class="card">
+    <input id="nomeMateria" placeholder="Nova matéria">
+    <button onclick="addMateria()">Adicionar</button>
+  </div>
+  <div id="listaMaterias"></div>
+</div>
+
+<div id="provas" class="hidden">
+  <div class="card">
+    <input id="materiaProva" placeholder="Matéria">
+    <button onclick="addProva()">Adicionar Prova</button>
+  </div>
+  <div id="listaProvas"></div>
+</div>
+
+</div>
+
+<script>
+let materias = JSON.parse(localStorage.getItem('materias')) || [];
+
+function salvar(){
+  localStorage.setItem('materias', JSON.stringify(materias));
+}
+
+function abrir(aba, btn){
+  document.querySelectorAll('.container > div').forEach(d=>d.classList.add('hidden'));
+  document.getElementById(aba).classList.remove('hidden');
+
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('ativo'));
+  if(btn) btn.classList.add('ativo');
+}
+
+function toast(msg){
+  const t = document.createElement('div');
+  t.className='toast';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(),2000);
+}
+
+function addMateria(){
+  const nome = document.getElementById('nomeMateria').value.trim();
+  if(!nome) return toast('Digite uma matéria');
+
+  materias.push({nome, tarefas: []});
+  salvar();
+  renderMaterias();
+  document.getElementById('nomeMateria').value='';
+  toast('Matéria adicionada');
+}
+
+function renderMaterias(){
+  const lista = document.getElementById('listaMaterias');
+  lista.innerHTML='';
+
+  if(materias.length===0){
+    lista.innerHTML='<p>Nenhuma matéria ainda 👆</p>';
+    return;
+  }
+
+  materias.forEach((m,i)=>{
+    const card = document.createElement('div');
+    card.className='card';
+    card.innerHTML=`
+      <h3>${m.nome} <button onclick="delMateria(${i})">X</button></h3>
+      <input placeholder="Nova tarefa" onkeydown="if(event.key==='Enter'){addTarefa(${i}, this.value); this.value=''}">
+      <div id="tarefas-${i}"></div>
+    `;
+
+    lista.appendChild(card);
+
+    const div = card.querySelector('#tarefas-'+i);
+    m.tarefas.forEach((t,ti)=>{
+      const el = document.createElement('div');
+      el.className='lista-item';
+      el.innerHTML=`
+        <div>
+          <input type="checkbox" ${t.c? 'checked':''} onchange="toggle(${i},${ti})">
+          <span class="${t.c?'concluida':''}">${t.t}</span>
+        </div>
+        <button onclick="delTarefa(${i},${ti})">X</button>
+      `;
+      div.appendChild(el);
+    });
+  });
+}
+
+function delMateria(i){
+  materias.splice(i,1);
+  salvar();
+  renderMaterias();
+}
+
+function addTarefa(i,v){
+  if(!v) return;
+  materias[i].tarefas.push({t:v,c:false});
+  salvar();
+  renderMaterias();
+}
+
+function delTarefa(i,ti){
+  materias[i].tarefas.splice(ti,1);
+  salvar();
+  renderMaterias();
+}
+
+function toggle(i,ti){
+  materias[i].tarefas[ti].c = !materias[i].tarefas[ti].c;
+  salvar();
+  renderMaterias();
+}
+
+function addProva(){
+  toast('Prova adicionada (exemplo)');
+}
+
+abrir('materias');
+renderMaterias();
+</script>
+
+</body>
+</html>
