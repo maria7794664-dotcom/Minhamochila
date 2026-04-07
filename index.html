@@ -39,7 +39,10 @@ nav {
   padding: 15px;
   border-radius: 12px;
   margin-bottom: 10px;
+  transition: all 0.3s;
 }
+
+.card:hover { transform: translateY(-2px); }
 
 .hidden { display: none; }
 
@@ -53,12 +56,24 @@ td, th {
   padding: 8px;
   text-align: center;
 }
+
+/* 📱 MOBILE */
+@media (max-width: 600px) {
+  nav { flex-direction: column; }
+  .container { padding: 10px; }
+}
+
+/* 🎯 CENTRALIZAR BOTÃO */
+.link-final {
+  text-align: center;
+  margin: 20px;
+}
 </style>
 </head>
 
 <body>
 
-<header> Mochila Escolar </header>
+<header>🎒 Mochila Escolar Profissional</header>
 
 <nav>
   <button onclick="abrir('materias')">Matérias</button>
@@ -89,8 +104,26 @@ td, th {
 
 </div>
 
+<div class="link-final">
+  <a href="resumoSO.html">
+    <button>💻 Sistemas Operacionais</button>
+  </a>
+</div>
+
 <script>
 let materias = [];
+
+// ---------------- SALVAR / CARREGAR
+function salvarDados(){
+  localStorage.setItem('materias', JSON.stringify(materias));
+}
+
+function carregarDados(){
+  const dados = localStorage.getItem('materias');
+  if(dados){
+    materias = JSON.parse(dados);
+  }
+}
 
 // ---------------- ABAS
 function abrir(aba){
@@ -106,20 +139,40 @@ function abrir(aba){
 
 // ---------------- MATÉRIAS
 function addMateria(){
-  const nome = document.getElementById('nomeMateria').value;
-  if(!nome) return;
+  const nome = document.getElementById('nomeMateria').value.trim();
+  if(!nome) return alert('Digite o nome da matéria');
 
   materias.push(nome);
   document.getElementById('nomeMateria').value='';
+
+  salvarDados();
   renderMaterias();
+}
+
+function delMateria(i){
+  if(confirm("Tem certeza que deseja excluir?")){
+    materias.splice(i,1);
+    salvarDados();
+    renderMaterias();
+  }
 }
 
 function renderMaterias(){
   const lista = document.getElementById('listaMaterias');
   lista.innerHTML='';
 
-  materias.forEach(m=>{
-    lista.innerHTML += `<div class="card">${m}</div>`;
+  if(materias.length === 0){
+    lista.innerHTML = "<p>Nenhuma matéria ainda 😢</p>";
+    return;
+  }
+
+  materias.forEach((m,i)=>{
+    lista.innerHTML += `
+      <div class="card">
+        ${m}
+        <button onclick="delMateria(${i})">Excluir</button>
+      </div>
+    `;
   });
 }
 
@@ -168,7 +221,9 @@ function carregarHorario(){
 }
 
 // INIT
+carregarDados();
 abrir('materias');
+renderMaterias();
 </script>
 
 </body>
