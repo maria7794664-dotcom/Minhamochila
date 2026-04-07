@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mochila Escolar Pro</title>
+<title>Mochila Escolar Profissional</title>
 
 <style>
 body {
@@ -26,9 +26,7 @@ header {
   font-weight: bold;
 }
 
-.dark header {
-  background: #2d6a4f;
-}
+.dark header { background: #2d6a4f; }
 
 nav {
   display: flex;
@@ -38,9 +36,7 @@ nav {
   padding: 10px;
 }
 
-.dark nav {
-  background: #344e41;
-}
+.dark nav { background: #344e41; }
 
 .container {
   padding: 20px;
@@ -53,11 +49,45 @@ nav {
   padding: 15px;
   border-radius: 12px;
   margin-bottom: 10px;
-  transition: 0.3s;
+  transition: all 0.3s;
 }
 
-.dark .card {
-  background: #2b2b2b;
+.dark .card { background: #2b2b2b; }
+
+.card:hover { transform: translateY(-2px); }
+
+.categoria {
+  background: #95d5b2;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 10px;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+}
+
+.categoria-conteudo {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 10px;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: 0.4s;
+}
+
+.categoria-conteudo.ativo {
+  max-height: 2000px;
+  opacity: 1;
+}
+
+input, select {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 8px;
+  border: 1px solid #ccc;
 }
 
 button {
@@ -69,10 +99,34 @@ button {
   margin-top: 5px;
 }
 
+button.excluir { background: #f28b82; }
+
+.lista-item {
+  display: flex;
+  justify-content: space-between;
+  background: #e6f4ea;
+  padding: 5px;
+  margin-bottom: 5px;
+  border-radius: 6px;
+}
+
+.concluida {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
 .hidden { display: none; }
 
+/* MOBILE */
 @media (max-width: 600px) {
   nav { flex-direction: column; }
+  .categoria-conteudo { grid-template-columns: 1fr; }
+}
+
+/* LINK FINAL */
+.link-final {
+  text-align: center;
+  margin: 20px;
 }
 </style>
 </head>
@@ -80,9 +134,8 @@ button {
 <body>
 
 <header>
-  🎒 Mochila Escolar PRO
-  <br>
-  <button onclick="toggleTema()">🌙 Alternar Tema</button>
+🎒 Mochila Escolar Profissional <br>
+<button onclick="toggleTema()">🌙 Tema</button>
 </header>
 
 <nav>
@@ -94,17 +147,48 @@ button {
 
 <div class="container">
 
-<div id="materias">
+<div id="materias" class="hidden">
   <div class="card">
     <input id="nomeMateria" placeholder="Nova matéria">
+    <select id="tipoMateria">
+      <option>Exatas</option>
+      <option>Humanas</option>
+      <option>Informática</option>
+    </select>
     <button onclick="addMateria()">Adicionar</button>
+    <input id="pesquisa" placeholder="Pesquisar..." oninput="renderMaterias()">
   </div>
   <div id="listaMaterias"></div>
 </div>
 
+<div id="horario" class="hidden">
+  <div class="card">
+    <h3>Matutino</h3>
+    <table id="matutino"></table>
+    <h3>Vespertino</h3>
+    <table id="vespertino"></table>
+  </div>
 </div>
 
-<div style="text-align:center; margin:20px;">
+<div id="provas" class="hidden">
+  <div class="card">
+    <input placeholder="Matéria">
+    <input type="date">
+    <button onclick="alert('Prova adicionada!')">Adicionar</button>
+  </div>
+</div>
+
+<div id="info" class="hidden">
+  <div class="card">
+    <input placeholder="Escola">
+    <input placeholder="Aluno">
+    <button onclick="alert('Salvo!')">Salvar</button>
+  </div>
+</div>
+
+</div>
+
+<div class="link-final">
   <a href="resumoSO.html">
     <button>💻 Sistemas Operacionais</button>
   </a>
@@ -113,67 +197,72 @@ button {
 <script>
 let materias = [];
 
-// ---------------- SALVAR DADOS
+// SALVAR
 function salvar(){
   localStorage.setItem('materias', JSON.stringify(materias));
+}
+
+// CARREGAR
+function carregar(){
+  const dados = localStorage.getItem('materias');
+  if(dados) materias = JSON.parse(dados);
+
+  if(localStorage.getItem('tema') === 'true'){
+    document.body.classList.add('dark');
+  }
+}
+
+// TEMA
+function toggleTema(){
+  document.body.classList.toggle('dark');
   localStorage.setItem('tema', document.body.classList.contains('dark'));
 }
 
-function carregar(){
-  const m = localStorage.getItem('materias');
-  if(m) materias = JSON.parse(m);
-
-  const tema = localStorage.getItem('tema');
-  if(tema === 'true') document.body.classList.add('dark');
+// ABAS
+function abrir(aba){
+  ['materias','horario','provas','info'].forEach(a=>document.getElementById(a).classList.add('hidden'));
+  document.getElementById(aba).classList.remove('hidden');
 }
 
-// ---------------- MATÉRIAS
+// MATÉRIAS
 function addMateria(){
   const nome = document.getElementById('nomeMateria').value;
+  const tipo = document.getElementById('tipoMateria').value;
+
   if(!nome) return alert("Digite algo");
 
-  materias.push(nome);
+  materias.push({nome,tipo,conteudos:[],tarefas:[]});
   document.getElementById('nomeMateria').value='';
   salvar();
-  render();
+  renderMaterias();
 }
 
-function remover(i){
+function delMateria(i){
   if(confirm("Excluir?")){
     materias.splice(i,1);
     salvar();
-    render();
+    renderMaterias();
   }
 }
 
-function render(){
+function renderMaterias(){
   const lista = document.getElementById('listaMaterias');
-  lista.innerHTML = '';
-
-  if(materias.length === 0){
-    lista.innerHTML = "<p>Nenhuma matéria ainda 😢</p>";
-    return;
-  }
+  lista.innerHTML='';
 
   materias.forEach((m,i)=>{
     lista.innerHTML += `
       <div class="card">
-        ${m}
-        <button onclick="remover(${i})">Excluir</button>
+        <b>${m.nome}</b>
+        <button onclick="delMateria(${i})">Excluir</button>
       </div>
     `;
   });
 }
 
-// ---------------- TEMA
-function toggleTema(){
-  document.body.classList.toggle('dark');
-  salvar();
-}
-
 // INIT
 carregar();
-render();
+abrir('materias');
+renderMaterias();
 </script>
 
 </body>
