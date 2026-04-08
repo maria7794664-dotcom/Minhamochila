@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mochila Escolar Profissional</title>
+<title>Mochila Escolar</title>
 
 <style>
 body {
@@ -31,24 +31,23 @@ header {
   position: relative;
 }
 
-/* botão dark */
 .dark-btn {
   position: absolute;
-  right: 15px;
+  right: 10px;
   top: 10px;
 }
 
 nav {
   display: flex;
-  gap: 10px;
   justify-content: center;
+  gap: 10px;
   background: #d8f3dc;
   padding: 10px;
 }
 
 .container {
   padding: 20px;
-  max-width: 1200px;
+  max-width: 1000px;
   margin: auto;
 }
 
@@ -57,41 +56,12 @@ nav {
   padding: 15px;
   border-radius: 12px;
   margin-bottom: 10px;
-  transition: all 0.3s;
 }
 
-.card:hover {
-  transform: translateY(-2px);
-}
+.hidden { display: none; }
 
-.categoria {
-  background: #95d5b2;
-  padding: 10px;
-  border-radius: 8px;
-  cursor: pointer;
-  margin-top: 10px;
-  font-weight: bold;
-  display: flex;
-  justify-content: space-between;
-}
-
-.categoria-conteudo {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 10px;
-  max-height: 0;
-  overflow: hidden;
-  opacity: 0;
-  transition: 0.4s;
-}
-
-.categoria-conteudo.ativo {
-  max-height: 2000px;
-  opacity: 1;
-}
-
-/* CORREÇÃO DO BUG */
-input, select, textarea {
+/* inputs corrigidos */
+input, select {
   width: 100%;
   padding: 10px;
   margin: 5px 0;
@@ -104,8 +74,8 @@ button {
   padding: 10px;
   border: none;
   border-radius: 8px;
-  cursor: pointer;
   background: #95d5b2;
+  cursor: pointer;
   margin-top: 5px;
 }
 
@@ -113,32 +83,21 @@ button.excluir {
   background: #f28b82;
 }
 
-.lista-item {
-  display: flex;
-  justify-content: space-between;
-  background: #e6f4ea;
-  padding: 5px 10px;
-  margin-bottom: 5px;
-  border-radius: 6px;
-}
-
-.concluida {
-  text-decoration: line-through;
-  opacity: 0.6;
-}
-
-.hidden { display: none; }
-
+/* tabela */
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 20px;
 }
 
 td, th {
   border: 1px solid #ccc;
   padding: 8px;
-  text-align: center;
+}
+
+td input {
+  width: 100%;
+  border: none;
+  outline: none;
 }
 </style>
 </head>
@@ -154,56 +113,40 @@ td, th {
   <button onclick="abrir('materias')">Matérias</button>
   <button onclick="abrir('horario')">Horário</button>
   <button onclick="abrir('provas')">Provas</button>
-  <button onclick="abrir('info')">Informações</button>
 </nav>
 
 <div class="container">
 
-<div id="materias" class="hidden">
+<!-- MATÉRIAS -->
+<div id="materias">
   <div class="card">
     <input id="nomeMateria" placeholder="Nova matéria">
-    <select id="tipoMateria">
-      <option>Exatas</option>
-      <option>Humanas</option>
-      <option>Informática</option>
-    </select>
     <button onclick="addMateria()">Adicionar</button>
-    <input id="pesquisa" placeholder="Pesquisar..." oninput="renderMaterias()">
   </div>
   <div id="listaMaterias"></div>
 </div>
 
+<!-- HORÁRIO -->
 <div id="horario" class="hidden">
   <div class="card">
-    <h3>Matutino (5 aulas)</h3>
+    <h3>Matutino</h3>
     <table id="matutino"></table>
 
-    <h3>Vespertino (4 aulas)</h3>
+    <h3>Vespertino</h3>
     <table id="vespertino"></table>
 
     <button onclick="salvarHorario()">Salvar Horário</button>
   </div>
 </div>
 
+<!-- PROVAS -->
 <div id="provas" class="hidden">
   <div class="card">
     <input id="materiaProva" placeholder="Matéria">
     <input id="dataProva" type="date">
-    <input id="conteudoProva" placeholder="Conteúdo da prova">
     <button onclick="addProva()">Adicionar Prova</button>
   </div>
   <div id="listaProvas"></div>
-</div>
-
-<div id="info" class="hidden">
-  <div class="card">
-    <input id="escola" placeholder="Escola">
-    <input id="turma" placeholder="Turma">
-    <input id="turno" placeholder="Turno">
-    <input id="aluno" placeholder="Nome do aluno">
-    <button onclick="salvarInfo()">Salvar Informações</button>
-    <div id="mostrarInfo"></div>
-  </div>
 </div>
 
 </div>
@@ -212,7 +155,7 @@ td, th {
 let materias = [];
 let provas = [];
 
-/* SALVAR / CARREGAR */
+/* LOCAL STORAGE */
 function salvarDados(){
   localStorage.setItem("materias", JSON.stringify(materias));
   localStorage.setItem("provas", JSON.stringify(provas));
@@ -230,70 +173,108 @@ function toggleDark(){
 
 /* NAVEGAÇÃO */
 function abrir(aba){
-  ['materias','horario','provas','info'].forEach(a=>document.getElementById(a).classList.add('hidden'));
-  document.getElementById(aba).classList.remove('hidden');
-  if(aba==='horario'){ gerarTabela('matutino',5); gerarTabela('vespertino',4); }
+  document.querySelectorAll(".container > div").forEach(d=>d.classList.add("hidden"));
+  document.getElementById(aba).classList.remove("hidden");
+
+  if(aba==="horario"){
+    gerarTabela("matutino",5);
+    gerarTabela("vespertino",4);
+  }
+
+  renderMaterias();
+  renderProvas();
 }
 
 /* MATÉRIAS */
 function addMateria(){
-  const nome = nomeMateria.value.trim();
-  const tipo = tipoMateria.value;
-  if(!nome) return alert('Digite o nome da matéria');
+  const nome = document.getElementById("nomeMateria").value;
+  if(!nome) return;
 
-  materias.push({nome,tipo,conteudos:[],tarefas:[],aberta:false});
-  nomeMateria.value='';
+  materias.push(nome);
+  document.getElementById("nomeMateria").value="";
   salvarDados();
   renderMaterias();
 }
 
 function renderMaterias(){
-  const lista = document.getElementById('listaMaterias');
-  lista.innerHTML='';
-  const pesquisa = document.getElementById('pesquisa').value.toLowerCase();
+  const lista = document.getElementById("listaMaterias");
+  lista.innerHTML="";
 
-  ['Exatas','Humanas','Informática'].forEach(tipo=>{
-    const grupo = materias.filter(m=>m.tipo===tipo && m.nome.toLowerCase().includes(pesquisa));
-    if(!grupo.length) return;
-
-    const cat = document.createElement('div');
-    cat.className='categoria';
-    cat.innerHTML = tipo;
-
-    const conteudo = document.createElement('div');
-    conteudo.className='categoria-conteudo';
-
-    cat.onclick = ()=>conteudo.classList.toggle('ativo');
-
-    lista.appendChild(cat);
-    lista.appendChild(conteudo);
-
-    grupo.forEach((m,i)=>{
-      const card=document.createElement('div');
-      card.className='card';
-      card.innerHTML=`<h4>${m.nome}</h4>`;
-      conteudo.appendChild(card);
-    });
+  materias.forEach((m,i)=>{
+    const div = document.createElement("div");
+    div.className="card";
+    div.innerHTML = `
+      ${m}
+      <button class="excluir" onclick="removerMateria(${i})">Excluir</button>
+    `;
+    lista.appendChild(div);
   });
+}
+
+function removerMateria(i){
+  materias.splice(i,1);
+  salvarDados();
+  renderMaterias();
+}
+
+/* HORÁRIO */
+function gerarTabela(id, aulas){
+  const tabela = document.getElementById(id);
+  tabela.innerHTML="";
+
+  for(let i=1;i<=aulas;i++){
+    tabela.innerHTML += `
+      <tr>
+        <td>Aula ${i}</td>
+        <td><input></td>
+      </tr>
+    `;
+  }
+}
+
+function salvarHorario(){
+  const dados = [];
+  document.querySelectorAll("table input").forEach(i=>dados.push(i.value));
+  localStorage.setItem("horario", JSON.stringify(dados));
+  alert("Horário salvo!");
 }
 
 /* PROVAS */
 function addProva(){
-  const materia = materiaProva.value;
-  const data = dataProva.value;
+  const materia = document.getElementById("materiaProva").value;
+  const data = document.getElementById("dataProva").value;
 
   if(!materia || !data) return alert("Preencha tudo!");
 
   provas.push({materia,data});
   salvarDados();
+  renderProvas();
+}
 
-  alert("Prova adicionada!");
+function renderProvas(){
+  const lista = document.getElementById("listaProvas");
+  lista.innerHTML="";
+
+  provas.forEach((p,i)=>{
+    const div = document.createElement("div");
+    div.className="card";
+    div.innerHTML = `
+      ${p.materia} - ${p.data}
+      <button class="excluir" onclick="removerProva(${i})">Excluir</button>
+    `;
+    lista.appendChild(div);
+  });
+}
+
+function removerProva(i){
+  provas.splice(i,1);
+  salvarDados();
+  renderProvas();
 }
 
 /* ALERTA */
 function verificarProvas(){
-  const hoje = new Date().toISOString().split('T')[0];
-
+  const hoje = new Date().toISOString().split("T")[0];
   provas.forEach(p=>{
     if(p.data === hoje){
       alert("⚠️ Prova HOJE de " + p.materia);
@@ -304,8 +285,7 @@ function verificarProvas(){
 /* INICIAR */
 carregarDados();
 verificarProvas();
-abrir('materias');
-renderMaterias();
+abrir("materias");
 </script>
 
 </body>
