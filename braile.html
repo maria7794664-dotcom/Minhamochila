@@ -18,6 +18,26 @@ header {
   padding: 15px;
   text-align: center;
   font-weight: bold;
+  position: relative;
+}
+
+/* BOTÃO VOLTAR */
+.voltar {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  text-decoration: none;
+  background: white;
+  padding: 6px 12px;
+  border-radius: 8px;
+  color: #2a3a2b;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.voltar:hover {
+  background: #d8f3dc;
 }
 
 .container {
@@ -53,7 +73,10 @@ footer {
 
 <body>
 
-<header>📚 Braille na Era Digital</header>
+<header>
+  <a href="index.html" class="voltar">⬅ Voltar</a>
+  📚 Braille na Era Digital
+</header>
 
 <div class="container">
 
