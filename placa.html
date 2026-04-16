@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Peças da Placa-Mãe</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Segoe UI, Arial;
+  background: #e6f4ea;
+  color: #2a3a2b;
+}
+header {
+  background: #b7e4c7;
+  padding: 20px;
+  text-align: center;
+  font-size: 22px;
+  font-weight: bold;
+}
+.container {
+  padding: 20px;
+  max-width: 1000px;
+  margin: auto;
+}
+.card {
+  background: white;
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  transition: 0.3s;
+}
+.card:hover {
+  transform: translateY(-3px);
+}
+.card img {
+  width: 120px;
+  border-radius: 10px;
+}
+.card-text {
+  flex: 1;
+}
+h3 {
+  margin: 0 0 5px 0;
+  color: #2d6a4f;
+}
+
+/* botão voltar */
+.voltar {
+  display: block;
+  margin: 20px auto;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 10px;
+  background: #95d5b2;
+  cursor: pointer;
+}
+.voltar:hover {
+  background: #74c69d;
+}
+</style>
+
+</head>
+<body>
+
+<header>
+  10 Principais Peças da Placa-Mãe
+</header>
+
+<div class="container">
+
+  <div class="card">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/CPU_socket.jpg">
+    <div class="card-text">
+      <h3>Socket do Processador</h3>
+      <p>O encaixe central onde o processador é instalado.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/0/0c/RAM_slots.jpg">
+    <div class="card-text">
+      <h3>Slots de Memória RAM</h3>
+      <p>Onde os pentes de memória são conectados.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/5/5b/Chipset.jpg">
+    <div class="card-text">
+      <h3>Chipset</h3>
+      <p>Gerencia o fluxo de dados entre processador, memória e periféricos.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6f/PCI_Express_slots.jpg">
+    <div class="card-text">
+      <h3>Slots PCIe</h3>
+      <p>Usados para placas de vídeo e outros dispositivos.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/2/2c/SATA_ports.jpg">
+    <div class="card-text">
+      <h3>Conectores SATA/M.2</h3>
+      <p>Para conectar HDs e SSDs.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/9/9e/VRM.jpg">
+    <div class="card-text">
+      <h3>VRM</h3>
+      <p>Regula a energia que vai para o processador.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/4/4d/ATX_power_connector.jpg">
+    <div class="card-text">
+      <h3>Conectores de Energia</h3>
+      <p>Distribuem energia da fonte para a placa.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/8/8a/CMOS_battery.jpg">
+    <div class="card-text">
+      <h3>Bateria CMOS</h3>
+      <p>Mantém configurações do sistema.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/1/1f/BIOS_chip.jpg">
+    <div class="card-text">
+      <h3>BIOS/UEFI</h3>
+      <p>Inicializa o hardware do computador.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/7/7d/IO_panel.jpg">
+    <div class="card-text">
+      <h3>Painel Traseiro</h3>
+      <p>Portas externas como USB, HDMI e rede.</p>
+    </div>
+  </div>
+
+  <button class="voltar" onclick="voltarPagina()">⬅ Voltar</button>
+
+</div>
+
+<script>
+function voltarPagina(){
+  if(history.length > 1){
+    history.back();
+  } else {
+    window.location.href = "index.html";
+  }
+}
+</script>
+
+</body>
+</html>
