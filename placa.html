@@ -24,6 +24,8 @@ header {
   max-width: 1000px;
   margin: auto;
 }
+
+/* CARD */
 .card {
   background: white;
   padding: 15px;
@@ -32,140 +34,111 @@ header {
   display: flex;
   gap: 15px;
   align-items: center;
-  transition: 0.3s;
+
+  transition: all 0.3s ease;
 }
+
+/* ANIMAÇÃO */
 .card:hover {
-  transform: translateY(-3px);
+  transform: translateY(-8px) scale(1.01);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
 }
+
+/* IMAGEM */
 .card img {
-  width: 120px;
-  height: 120px;
-  object-fit: cover;
-  border-radius: 10px;
+  width: 100px;
+  transition: transform 0.3s ease;
 }
-.card-text {
-  flex: 1;
+
+/* ZOOM NA IMAGEM */
+.card:hover img {
+  transform: scale(1.15) rotate(2deg);
 }
+
+/* TEXTO */
 h3 {
-  margin: 0 0 5px 0;
+  margin: 0;
   color: #2d6a4f;
 }
+
+/* BOTÃO */
 .voltar {
   display: block;
   margin: 20px auto;
-  padding: 12px 20px;
-  border: none;
-  border-radius: 10px;
+  padding: 10px;
   background: #95d5b2;
+  border: none;
+  border-radius: 8px;
   cursor: pointer;
+  transition: 0.3s;
 }
+
 .voltar:hover {
   background: #74c69d;
+  transform: scale(1.05);
 }
 </style>
 
 </head>
 <body>
 
-<header>
-  10 Principais Peças da Placa-Mãe
-</header>
+<header>10 Principais Peças da Placa-Mãe</header>
 
 <div class="container">
 
-  <div class="card">
-    <img src="https://source.unsplash.com/200x200/?cpu">
-    <div class="card-text">
-      <h3>Socket do Processador</h3>
-      <p>O encaixe central onde o processador é instalado.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <img src="https://source.unsplash.com/200x200/?ram">
-    <div class="card-text">
-      <h3>Slots de Memória RAM</h3>
-      <p>Onde os pentes de memória são conectados.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <img src="https://source.unsplash.com/200x200/?chip">
-    <div class="card-text">
-      <h3>Chipset</h3>
-      <p>Gerencia o fluxo de dados entre processador, memória e periféricos.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <img src="https://source.unsplash.com/200x200/?gpu">
-    <div class="card-text">
-      <h3>Slots PCIe</h3>
-      <p>Usados para placas de vídeo e outros dispositivos.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <img src="https://source.unsplash.com/200x200/?ssd">
-    <div class="card-text">
-      <h3>Conectores SATA/M.2</h3>
-      <p>Para conectar HDs e SSDs.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <img src="https://source.unsplash.com/200x200/?electronics">
-    <div class="card-text">
-      <h3>VRM</h3>
-      <p>Regula a energia que vai para o processador.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <img src="https://source.unsplash.com/200x200/?power-supply">
-    <div class="card-text">
-      <h3>Conectores de Energia</h3>
-      <p>Distribuem energia da fonte para a placa.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <img src="https://source.unsplash.com/200x200/?battery">
-    <div class="card-text">
-      <h3>Bateria CMOS</h3>
-      <p>Mantém configurações do sistema.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <img src="https://source.unsplash.com/200x200/?bios">
-    <div class="card-text">
-      <h3>BIOS/UEFI</h3>
-      <p>Inicializa o hardware do computador.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <img src="https://source.unsplash.com/200x200/?computer-ports">
-    <div class="card-text">
-      <h3>Painel Traseiro</h3>
-      <p>Portas externas como USB, HDMI e rede.</p>
-    </div>
-  </div>
-
-  <button class="voltar" onclick="voltarPagina()">⬅ Voltar</button>
-
+<div class="card">
+<img src="https://cdn-icons-png.flaticon.com/512/4248/4248443.png">
+<div><h3>Socket do Processador</h3><p>O encaixe central onde o processador é instalado.</p></div>
 </div>
 
-<script>
-function voltarPagina(){
-  if(history.length > 1){
-    history.back();
-  } else {
-    window.location.href = "index.html";
-  }
-}
-</script>
+<div class="card">
+<img src="https://cdn-icons-png.flaticon.com/512/2721/2721297.png">
+<div><h3>Slots de Memória RAM</h3><p>Onde os pentes de memória são conectados.</p></div>
+</div>
+
+<div class="card">
+<img src="https://cdn-icons-png.flaticon.com/512/3659/3659898.png">
+<div><h3>Chipset</h3><p>Gerencia o fluxo de dados entre processador, memória e periféricos.</p></div>
+</div>
+
+<div class="card">
+<img src="https://cdn-icons-png.flaticon.com/512/1048/1048940.png">
+<div><h3>Slots PCIe</h3><p>Usados para placas de vídeo e outros dispositivos.</p></div>
+</div>
+
+<div class="card">
+<img src="https://cdn-icons-png.flaticon.com/512/2920/2920244.png">
+<div><h3>Conectores SATA/M.2</h3><p>Para conectar HDs e SSDs.</p></div>
+</div>
+
+<div class="card">
+<img src="https://cdn-icons-png.flaticon.com/512/1055/1055687.png">
+<div><h3>VRM</h3><p>Regula a energia que vai para o processador.</p></div>
+</div>
+
+<div class="card">
+<img src="https://cdn-icons-png.flaticon.com/512/2933/2933245.png">
+<div><h3>Conectores de Energia</h3><p>Distribuem energia da fonte para a placa.</p></div>
+</div>
+
+<div class="card">
+<img src="https://cdn-icons-png.flaticon.com/512/3523/3523063.png">
+<div><h3>Bateria CMOS</h3><p>Mantém configurações do sistema.</p></div>
+</div>
+
+<div class="card">
+<img src="https://cdn-icons-png.flaticon.com/512/1822/1822899.png">
+<div><h3>BIOS/UEFI</h3><p>Inicializa o hardware do computador.</p></div>
+</div>
+
+<div class="card">
+<img src="https://cdn-icons-png.flaticon.com/512/565/565547.png">
+<div><h3>Painel Traseiro</h3><p>Portas externas como USB, HDMI e rede.</p></div>
+</div>
+
+<button class="voltar" onclick="history.back()">⬅ Voltar</button>
+
+</div>
 
 </body>
 </html>
