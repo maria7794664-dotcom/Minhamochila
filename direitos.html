@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Educação em Direitos Humanos</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Segoe UI, Arial;
+  background: #e6f4ea;
+  color: #2a3a2b;
+}
+header {
+  background: #b7e4c7;
+  padding: 20px;
+  text-align: center;
+  font-size: 22px;
+  font-weight: bold;
+}
+.container {
+  padding: 20px;
+  max-width: 1000px;
+  margin: auto;
+}
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  transition: all 0.3s;
+}
+.card:hover {
+  transform: translateY(-3px);
+}
+h2 {
+  color: #2d6a4f;
+}
+h3 {
+  margin-top: 15px;
+  color: #40916c;
+}
+p {
+  line-height: 1.6;
+  text-align: justify;
+}
+
+/* Botão voltar */
+.voltar {
+  display: block;
+  margin: 20px auto;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 10px;
+  background: #95d5b2;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.3s;
+}
+.voltar:hover {
+  background: #74c69d;
+}
+</style>
+
+</head>
+<body>
+
+<header>
+  Educação em Direitos Humanos
+</header>
+
+<div class="container">
+
+  <div class="card">
+    <p>
+      A educação em Direitos Humanos (DH) na escola é um processo contínuo que transforma o ambiente escolar em um espaço democrático, baseado no respeito mútuo, na igualdade e na dignidade.
+    </p>
+
+    <p>
+      A relação entre professores, alunos e outros profissionais deve superar a transmissão de conteúdo, pautando-se na vivência cotidiana de cidadania, empatia, diálogo e valorização das diversidades.
+    </p>
+  </div>
+
+  <div class="card">
+    <h2>Aspectos Fundamentais nas Relações Escolares</h2>
+
+    <h3>Relação Professor-Aluno</h3>
+    <p>
+      Deve ser pautada no respeito, na escuta ativa, na autonomia e na confiança, sendo essencial para a aprendizagem eficaz e o desenvolvimento emocional.
+    </p>
+
+    <h3>Gestão Democrática e Participação</h3>
+    <p>
+      A escola precisa ser democrática em sua estrutura, com a participação de alunos, pais e funcionários na tomada de decisões.
+    </p>
+
+    <h3>Práticas no Cotidiano (Vivência)</h3>
+    <p>
+      Os Direitos Humanos não se limitam a uma disciplina, mas sim a uma prática contínua.
+    </p>
+
+    <h3>Formação e Atuação dos Profissionais</h3>
+    <p>
+      Professores buscam transmitir valores de cidadania e fortalecer o processo educativo.
+    </p>
+
+    <h3>Resistência a Retrocessos</h3>
+    <p>
+      A educação em Direitos Humanos garante liberdade de ensinar e aprender.
+    </p>
+  </div>
+
+  <div class="card">
+    <p>
+      A educação em Direitos Humanos é um compromisso ético e legal, alinhado ao ECA e ao PNEDH.
+    </p>
+  </div>
+
+  <!-- BOTÃO VOLTAR -->
+  <button class="voltar" onclick="voltarPagina()">⬅ Voltar</button>
+
+</div>
+
+<script>
+function voltarPagina(){
+  if(history.length > 1){
+    history.back();
+  } else {
+    window.location.href = "index.html"; // você pode trocar isso depois
+  }
+}
+</script>
+
+</body>
+</html>
