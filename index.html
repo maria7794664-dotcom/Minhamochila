@@ -3,13 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mochila Escolar</title>
+<title>Mochila Escolar Profissional</title>
 
 <style>
 body {
   margin: 0;
   font-family: Segoe UI, Arial;
   background: #e6f4ea;
+  color: #2a3a2b;
 }
 header {
   background: #b7e4c7;
@@ -19,8 +20,8 @@ header {
 }
 nav {
   display: flex;
-  justify-content: center;
   gap: 10px;
+  justify-content: center;
   background: #d8f3dc;
   padding: 10px;
 }
@@ -34,249 +35,172 @@ nav {
   padding: 15px;
   border-radius: 12px;
   margin-bottom: 10px;
+  transition: all 0.3s;
 }
-.hidden { display: none; }
-.lista-item {
+.card:hover {
+  transform: translateY(-2px);
+}
+.categoria {
+  background: #95d5b2;
+  padding: 10px;
+  border-radius: 8px;
+  margin-top: 10px;
   display: flex;
   justify-content: space-between;
-  background: #e6f4ea;
-  padding: 5px;
-  margin: 5px 0;
 }
-.concluida {
-  text-decoration: line-through;
-  opacity: 0.6;
+.categoria-conteudo {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 10px;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: 0.4s;
+}
+.categoria-conteudo.ativo {
+  max-height: 2000px;
+  opacity: 1;
+}
+input, select {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 8px;
 }
 button {
-  padding: 8px;
+  padding: 10px;
   border: none;
   border-radius: 8px;
   background: #95d5b2;
   cursor: pointer;
 }
-.excluir { background: #f28b82; }
-table { width:100%; border-collapse: collapse; }
-td,th { border:1px solid #ccc; padding:5px; }
+button.excluir { background: #f28b82; }
+.lista-item {
+  display: flex;
+  justify-content: space-between;
+  background: #e6f4ea;
+  padding: 5px;
+  margin-bottom: 5px;
+  border-radius: 6px;
+}
+.concluida { text-decoration: line-through; opacity: 0.6; }
+.hidden { display: none; }
 </style>
-</head>
 
+</head>
 <body>
 
 <header>Mochila Escolar</header>
 
 <nav>
-<button onclick="abrir('materias')">Matérias</button>
-<button onclick="abrir('horario')">Horário</button>
-<button onclick="abrir('provas')">Provas</button>
-<button onclick="abrir('info')">Informações</button>
+  <button onclick="abrir('materias')">Matérias</button>
+  <button onclick="abrir('horario')">Horário</button>
+  <button onclick="abrir('provas')">Provas</button>
+  <button onclick="abrir('info')">Informações</button>
 </nav>
 
 <div class="container">
 
-<!-- MATÉRIAS -->
 <div id="materias">
-<div class="card">
-<input id="nomeMateria" placeholder="Nova matéria">
-<button onclick="addMateria()">Adicionar</button>
-</div>
-<div id="listaMaterias"></div>
-</div>
-
-<!-- HORÁRIO -->
-<div id="horario" class="hidden">
-<div class="card">
-<h3>Horário</h3>
-<table id="tabelaHorario"></table>
-<button onclick="salvarHorario()">Salvar Horário</button>
-</div>
-</div>
-
-<!-- PROVAS -->
-<div id="provas" class="hidden">
-<div class="card">
-<input id="materiaProva" placeholder="Matéria">
-<input id="dataProva" type="date">
-<input id="conteudoProva" placeholder="Conteúdo">
-<button onclick="addProva()">Adicionar</button>
-</div>
-<div id="listaProvas"></div>
-</div>
-
-<!-- INFO -->
-<div id="info" class="hidden">
-<div class="card">
-<input id="escola" placeholder="Escola">
-<input id="turma" placeholder="Turma">
-<input id="turno" placeholder="Turno">
-<input id="aluno" placeholder="Aluno">
-<button onclick="salvarInfo()">Salvar</button>
-<div id="mostrarInfo"></div>
-</div>
+  <div class="card">
+    <input id="nomeMateria" placeholder="Nova matéria">
+    <select id="tipoMateria">
+      <option>Exatas</option>
+      <option>Humanas</option>
+      <option>Informática</option>
+    </select>
+    <button onclick="addMateria()">Adicionar</button>
+  </div>
+  <div id="listaMaterias"></div>
 </div>
 
 </div>
 
 <script>
 
-// ---------------- STORAGE
-function salvarTudo(){
-localStorage.setItem('materias', JSON.stringify(materias));
-localStorage.setItem('provas', JSON.stringify(provas));
-localStorage.setItem('info', JSON.stringify(info));
-localStorage.setItem('horario', JSON.stringify(horario));
+// --------------------
+// 🔥 STORAGE
+function salvarDados(){
+  localStorage.setItem('materias', JSON.stringify(materias));
 }
 
-function carregarTudo(){
-materias = JSON.parse(localStorage.getItem('materias')) || [];
-provas = JSON.parse(localStorage.getItem('provas')) || [];
-info = JSON.parse(localStorage.getItem('info')) || {};
-horario = JSON.parse(localStorage.getItem('horario')) || {};
+function carregarDados(){
+  materias = JSON.parse(localStorage.getItem('materias')) || [];
 }
 
-// ---------------- VARS
+// --------------------
 let materias = [];
-let provas = [];
-let info = {};
-let horario = {};
 
-// ---------------- ABAS
-function abrir(id){
-['materias','horario','provas','info'].forEach(a=>document.getElementById(a).classList.add('hidden'));
-document.getElementById(id).classList.remove('hidden');
-if(id==='horario') gerarHorario();
-renderProvas();
-mostrarInfo();
+function abrir(aba){
+  document.getElementById('materias').classList.remove('hidden');
 }
 
-// ---------------- MATÉRIAS
+// --------------------
+// MATÉRIAS
 function addMateria(){
-const nome = nomeMateria.value.trim();
-if(!nome) return;
+  const nome = document.getElementById('nomeMateria').value.trim();
+  const tipo = document.getElementById('tipoMateria').value;
 
-materias.push({nome,conteudos:[],tarefas:[]});
-nomeMateria.value='';
-salvarTudo();
-renderMaterias();
+  if(!nome) return alert('Digite o nome');
+
+  materias.push({nome,tipo,conteudos:[],tarefas:[]});
+
+  salvarDados(); // 🔥 salva
+  renderMaterias();
+
+  document.getElementById('nomeMateria').value='';
 }
 
 function renderMaterias(){
-listaMaterias.innerHTML='';
-materias.forEach((m,i)=>{
-const div=document.createElement('div');
-div.className='card';
+  const lista = document.getElementById('listaMaterias');
+  lista.innerHTML='';
 
-div.innerHTML=`
-<h3>${m.nome} <button class="excluir" onclick="delMateria(${i})">X</button></h3>
+  materias.forEach((m,i)=>{
+    const card = document.createElement('div');
+    card.className='card';
 
-<input placeholder="Conteúdo" onkeydown="if(event.key==='Enter'){addConteudo(${i},this.value);this.value=''}">
-<div id="c-${i}"></div>
+    card.innerHTML = `
+      <h3>${m.nome} <button class="excluir" onclick="delMateria(${i})">X</button></h3>
+      <input placeholder="Novo conteúdo" onkeydown="if(event.key==='Enter'){addConteudo(${i},this.value);this.value=''}">
+      <div id="conteudos-${i}"></div>
+    `;
 
-<input placeholder="Tarefa" onkeydown="if(event.key==='Enter'){addTarefa(${i},this.value);this.value=''}">
-<div id="t-${i}"></div>
-`;
+    lista.appendChild(card);
 
-listaMaterias.appendChild(div);
-
-// conteúdos
-m.conteudos.forEach((c,ci)=>{
-document.getElementById('c-'+i).innerHTML+=`
-<div class="lista-item">${c}
-<button onclick="delConteudo(${i},${ci})">X</button></div>`;
-});
-
-// tarefas
-m.tarefas.forEach((t,ti)=>{
-document.getElementById('t-'+i).innerHTML+=`
-<div class="lista-item">
-<div>
-<input type="checkbox" ${t.concluida?'checked':''} onchange="toggleTarefa(${i},${ti})">
-<span class="${t.concluida?'concluida':''}">${t.texto}</span>
-</div>
-<button onclick="delTarefa(${i},${ti})">X</button>
-</div>`;
-});
-
-});
+    const div = card.querySelector('#conteudos-'+i);
+    m.conteudos.forEach((c,ci)=>{
+      div.innerHTML += `
+        <div class="lista-item">
+          ${c}
+          <button onclick="delConteudo(${i},${ci})">X</button>
+        </div>
+      `;
+    });
+  });
 }
 
-function delMateria(i){ materias.splice(i,1); salvarTudo(); renderMaterias(); }
-function addConteudo(i,v){ if(!v) return; materias[i].conteudos.push(v); salvarTudo(); renderMaterias(); }
-function delConteudo(i,ci){ materias[i].conteudos.splice(ci,1); salvarTudo(); renderMaterias(); }
-function addTarefa(i,v){ if(!v) return; materias[i].tarefas.push({texto:v,concluida:false}); salvarTudo(); renderMaterias(); }
-function delTarefa(i,ti){ materias[i].tarefas.splice(ti,1); salvarTudo(); renderMaterias(); }
-function toggleTarefa(i,ti){ materias[i].tarefas[ti].concluida=!materias[i].tarefas[ti].concluida; salvarTudo(); renderMaterias(); }
-
-// ---------------- HORÁRIO
-function gerarHorario(){
-const dias=['Seg','Ter','Qua','Qui','Sex'];
-let html='<tr><th></th>';
-dias.forEach(d=>html+=`<th>${d}</th>`);
-html+='</tr>';
-
-for(let i=1;i<=5;i++){
-html+=`<tr><td>${i}</td>`;
-dias.forEach(d=>{
-const val = horario[`${i}-${d}`] || '';
-html+=`<td contenteditable oninput="horario['${i}-${d}']=this.innerText">${val}</td>`;
-});
-html+='</tr>';
+function delMateria(i){
+  materias.splice(i,1);
+  salvarDados();
+  renderMaterias();
 }
 
-tabelaHorario.innerHTML=html;
+function addConteudo(i,v){
+  if(!v) return;
+  materias[i].conteudos.push(v);
+  salvarDados();
+  renderMaterias();
 }
 
-function salvarHorario(){
-salvarTudo();
-alert('Horário salvo!');
+function delConteudo(i,ci){
+  materias[i].conteudos.splice(ci,1);
+  salvarDados();
+  renderMaterias();
 }
 
-// ---------------- PROVAS
-function addProva(){
-const m=materiaProva.value;
-const d=dataProva.value;
-const c=conteudoProva.value;
-if(!m||!d) return;
-
-provas.push({m,d,c});
-salvarTudo();
-renderProvas();
-}
-
-function renderProvas(){
-listaProvas.innerHTML='';
-provas.forEach((p,i)=>{
-listaProvas.innerHTML+=`
-<div class="card">
-${p.m} - ${p.d}<br>${p.c}
-<button onclick="delProva(${i})">X</button>
-</div>`;
-});
-}
-
-function delProva(i){ provas.splice(i,1); salvarTudo(); renderProvas(); }
-
-// ---------------- INFO
-function salvarInfo(){
-info={
-escola:escola.value,
-turma:turma.value,
-turno:turno.value,
-aluno:aluno.value
-};
-salvarTudo();
-mostrarInfo();
-}
-
-function mostrarInfo(){
-if(!info.aluno) return;
-mostrarInfo.innerHTML=`
-<b>${info.aluno}</b><br>
-${info.escola}<br>
-${info.turma} - ${info.turno}`;
-}
-
-// ---------------- INIT
-carregarTudo();
+// --------------------
+// INICIAL
+carregarDados();
 renderMaterias();
 
 </script>
